@@ -360,6 +360,12 @@ module ActiveRecord
         end
       end
 
+      def check_if_write_query(sql)
+        return unless preventing_writes? && write_query?(sql)
+
+        raise ActiveRecord::ReadOnlyError, "Write query attempted while in readonly mode: #{sql}"
+      end
+
       class << self
         def initialize_type_map(m)
           # :nodoc:
